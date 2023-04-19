@@ -1,0 +1,30 @@
+version: "3.3"
+services:
+  
+  # api:
+  #   build:
+  #     context: ./MoviesApi
+  #     dockerfile: Dockerfile
+  #   image: movies-app_api:latest
+  #   restart: unless-stopped
+  #   container_name: movies-app_api
+  #   depends_on: 
+  #     - database
+  #   environment:
+  #     - DB_CONNECTION_STRING=Data Source=database;Database=MoviesApp;User ID=sa;Password=Au471pn*%122;Trust Server Certificate=true
+
+  database:
+    image: mcr.microsoft.com/mssql/server
+    container_name: movies-app_database
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Au471pn*%122"
+    expose:
+      - 1434
+    ports:
+      - "1434:1434"
+    volumes:
+      - sql-data:/var/opt/mssql
+volumes:
+  sql-data:    
