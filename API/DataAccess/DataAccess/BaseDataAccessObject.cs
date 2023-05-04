@@ -18,7 +18,7 @@ namespace MoviesAPI.DataAccess
         {
             return await _dbContext
                             .Set<TEntity>()
-                            .Where(x => !skipDeleted || x.DeletedAt != DateTime.MinValue)
+                            .Where(x => !skipDeleted || x.DeletedAt == DateTime.MinValue)
                             .ToListAsync();
         }
 

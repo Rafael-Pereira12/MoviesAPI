@@ -13,9 +13,6 @@ namespace BeeEngineering.Learning.MoviesApp.Data
         [ForeignKey(nameof(Actor))]
         public int? ActorId { get; set; }
         public virtual Actor? Actor { get; set; }
-
-        public MovieActor()
-        {
-        }
+     
     }
 }

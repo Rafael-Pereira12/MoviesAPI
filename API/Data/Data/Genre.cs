@@ -7,9 +7,6 @@ namespace BeeEngineering.Learning.MoviesApp.Data
 	{
         public IEnumerable<MovieGenre>? Movies { get; set; }
 
-        public Genre(string _Name) : base(_Name) 
-		{
-		}
 	}
 
 }

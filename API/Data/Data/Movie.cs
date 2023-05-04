@@ -7,9 +7,9 @@ namespace BeeEngineering.Learning.MoviesApp.Data
 {
 	public class Movie : Entity
 	{
-		public string? Title { get; set; }
+		public string Title { get; set; }
 
-		public DateTime? ReleaseDate { get; set; }
+		public DateTime ReleaseDate { get; set; }
 
 		[ForeignKey(nameof(Director))]
 		public int? DirectorId { get; set; }
@@ -19,11 +19,6 @@ namespace BeeEngineering.Learning.MoviesApp.Data
 
         public IEnumerable<MovieActor>? Actors { get; set; }
 
-        public Movie(string _Title, DateTime _ReleaseDate)
-		{
-			Title = _Title;
-			ReleaseDate = _ReleaseDate;
-		}
 	}
 
 }

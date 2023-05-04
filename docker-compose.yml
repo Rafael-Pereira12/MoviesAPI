@@ -23,7 +23,7 @@ services:
     depends_on: 
       - database
     environment:
-      - DB_CONNECTION_STRING=Data Source=database;Database=MoviesApp;User ID=sa;Password=Au471pn*%122;Trust Server Certificate=true
+      - DB_CONNECTION_STRING=Data Source=database;Database=MoviesApp;User ID=sa;Password=Au471pn*%122;TrustServerCertificate=true
 
   database:
     image: mcr.microsoft.com/mssql/server
@@ -33,9 +33,9 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "Au471pn*%122"
     expose:
-      - 1434
+      - 1433
     ports:
-      - "1434:1434"
+      - "1433:1433"
     volumes:
       - sql-data:/var/opt/mssql
 volumes:
