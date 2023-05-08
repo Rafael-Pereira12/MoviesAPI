@@ -1,8 +1,10 @@
 ﻿using BeeEngineering.Learning.MoviesApp.Data;
 using Business;
 using Business.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoviesAPI.Business;
+using MoviesAPI.Model;
 using MoviesAPI.Requests;
 using MoviesAPI.Responses;
 using System;
@@ -10,6 +12,8 @@ using System.Numerics;
 
 namespace MoviesAPI.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
+    [Authorize(Roles = UserRoles.User)]
     [Route("api/movie")]
     [ApiController]
     public class MovieController : ControllerBase
@@ -82,7 +86,6 @@ namespace MoviesAPI.Controllers
         [HttpDelete("delete/{uuid}")]
         public async Task<IActionResult> DeleteAsync(Guid uuid)
         {
-            //var model = new Movie() { Uuid = uuid };
             var model = await _bo.Get(uuid);
             var result = await _bo.Delete(model.Result);
             if (result.IsSuccessful) return Ok();

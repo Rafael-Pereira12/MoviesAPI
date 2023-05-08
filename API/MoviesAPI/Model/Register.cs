@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BeeEngineering.Learning.MoviesApp.Data.Base;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoviesAPI.Model
 {
-    public class RegisterModel
+    public class Register 
     {
         [Required(ErrorMessage = "Username is required")]
         public string? Username { get; set; }

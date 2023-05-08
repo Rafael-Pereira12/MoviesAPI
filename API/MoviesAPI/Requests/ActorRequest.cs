@@ -5,7 +5,7 @@ namespace MoviesAPI.Requests
     public class ActorRequest
     {
         public Guid? Uuid { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public DateTime BirthDate { get; set; }
 
         public Actor ToModel()

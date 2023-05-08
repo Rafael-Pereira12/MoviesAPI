@@ -23,7 +23,7 @@ namespace Business
             });
         }
 
-        public async Task<OperationResult<Actor>> Get(Guid uuid)
+        public async Task<OperationResult<Actor?>> Get(Guid uuid)
         {
             return await ExecuteOperationAsync(async () =>
             {

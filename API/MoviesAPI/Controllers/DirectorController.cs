@@ -1,14 +1,17 @@
 ﻿using BeeEngineering.Learning.MoviesApp.Data;
 using Business;
 using Business.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoviesAPI.DataAccess;
+using MoviesAPI.Model;
 using MoviesAPI.Requests;
 using MoviesAPI.Responses;
 
 namespace MoviesAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/director")]
     [ApiController]
     public class DirectorController : ControllerBase

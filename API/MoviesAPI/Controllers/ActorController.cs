@@ -1,11 +1,14 @@
 ﻿using Business;
 using Business.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MoviesAPI.Model;
 using MoviesAPI.Requests;
 using MoviesAPI.Responses;
 
 namespace MoviesAPI.Controllers
 {
+    //[Authorize(Roles = "Admin")]
     [Route("api/actor")]
     [ApiController]
     public class ActorController : ControllerBase
@@ -17,6 +20,7 @@ namespace MoviesAPI.Controllers
             _bo = bo;
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("list")]
         public async Task<ActionResult<List<ActorResult>>> ListAsync()
         {

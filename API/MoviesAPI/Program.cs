@@ -4,15 +4,18 @@ using DataAccess.DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MoviesAPI.DataAccess;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
-//builder.Services.AddDbContext<MoviesAppContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<IdentityUser,  IdentityRole>()
+builder.Services.AddIdentityCore<IdentityUser<long>>()
+    .AddRoles<IdentityRole<long>>()
     .AddEntityFrameworkStores<MoviesAppContext>()
+    .AddSignInManager<SignInManager<IdentityUser<long>>>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
@@ -20,7 +23,22 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-});
+})
+.AddJwtBearer(options =>
+ {
+     options.SaveToken = true;
+     options.RequireHttpsMetadata = false;
+     options.TokenValidationParameters = new TokenValidationParameters()
+     {
+         ValidateIssuer = true,
+         ValidateAudience = true,
+         ValidAudience = configuration["JWT:ValidAudience"],
+         ValidIssuer = configuration["JWT.ValidIssuer"],
+         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+     };
+ });
+
+
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -32,14 +50,14 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
 
-    // Lockout settings.
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
+    //// Lockout settings.
+    //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    //options.Lockout.MaxFailedAccessAttempts = 5;
+    //options.Lockout.AllowedForNewUsers = true;
 
     // User settings.
     options.User.AllowedUserNameCharacters =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+!";
     options.User.RequireUniqueEmail = false;
 });
 
@@ -56,7 +74,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 
 
-var connectionString = builder.Configuration.GetConnectionString("Store2");
+var connectionString = builder.Configuration.GetConnectionString("MoviesApi");
 //var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 // Add services to the container.
 
@@ -88,12 +106,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    var serviceFactory = (IServiceScopeFactory)app.Services.GetService(typeof(IServiceScopeFactory));
-    using (var scope = serviceFactory.CreateScope())
+    var serviceFactory = (IServiceScopeFactory?)app.Services.GetService(typeof(IServiceScopeFactory));
+    using (var scope = serviceFactory?.CreateScope())
     {
-        var services = scope.ServiceProvider;
-        var dbContext = services.GetRequiredService<MoviesAppContext>();
-        dbContext.Database.EnsureCreated();
+        var services = scope?.ServiceProvider;
+        var dbContext = services?.GetRequiredService<MoviesAppContext>();
+        dbContext?.Database.EnsureCreated();
     }
 }
 
